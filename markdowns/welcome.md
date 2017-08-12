@@ -1,5 +1,46 @@
 # Welcome!
 
+In this tutorial we will look at default and private methods within interfaces. Default methods were added in Java 8 allowing methods to be added to an interface that comes with a default implementation that could be used, overridden or ignored without causing issues to the existing classes that have implemented an interface. Private methods were something that was missing when this feature was added as code could not be split out into smaller methods within an interface. This is something that was a bit off putting to me as if you had a default method that became a bit long there was no way to tidy it up. So now that both default and private methods can exist within an interface we can write methods like we are used to, although if you haven't used default methods yet then you will first need to get past the fact that there is now actual code living in an interface.
+
+In terms of adding default and private methods to an interface, its really simple. To add a default method just add the keyword `default` to the method definition and I'm not even going to tell you how to add a private method as I don't wish to insult you!
+
+Being it's so simple lets just jump straight into some code examples.
+
+```java
+public interface MyInterface {
+
+  default void defaultMethod() {
+    privateMethod("Hello from the default method!");
+  }
+
+  private void privateMethod(final String string) {
+    System.out.println(string);
+  }
+
+  void normalMethod();
+}
+```
+
+```java
+public class MyClassWithDefaultMethod implements MyInterface {
+
+  @Override
+  public void normalMethod() {
+    System.out.println("Hello from the implemented method!");
+  }
+}
+```
+
+@[Hello World Example]({"stubs": ["MainWithDefaultMethod.java"], "command": "javac *.java && java MainWithDefaultMethod"})
+
+default methods can still be overridden as normal
+provide a default implementation if not replaced (as the name suggests)
+add context to why default methods are useful (added to jdk8 to help in adding features to the jdk), a class can inherit from multiple interfaces and therefore the default methods can help provide code that can easily be added to classes via implementing interfaces
+private methods are used like normal private methods, simply let you reuse and tidy up code within the interface. Which was something that was missing from default methods in java8 which could lead to long default methods.
+what happens if a private or package private method is added to the class who's interface has a default method of the same name
+try and find a decent use case for default + private methods, but start with the basic example
+mention static methods, but I dont really see much point of them
+
 This Java template lets you get started quickly with a simple working example using Maven and JUnit. If it is your first contribution then you should have a look at the [Getting Started](https://tech.io/doc/getting-started-create-playground) document.
 
 
