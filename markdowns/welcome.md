@@ -30,8 +30,36 @@ public class MyClassWithDefaultMethod implements MyInterface {
   }
 }
 ```
+As you can see from the basic snippets above a default method is defined on the interface which in turn calls a private method. As the name suggests it is a default method and therefore due to `MyClassWithDefaultMethod` not providing an implementation for defaultMethod it will carry on and use what is defined on the interface. So if defaultMethod and normalMethod were called they would produce the following output.
 
-@[Hello World Example]({"stubs": ["MainWithDefaultMethod.java"], "command": "javac *.java && java MainWithDefaultMethod"})
+```
+Hello from the default method!
+Hello from the implemented method!
+```
+There is really not much to it. If you wanted to provide your own implementation of the default method within the class then as you would with a normal interface method, just add a method with the same name and preferably pop the `@Override` annotation on top of it.
+
+```java
+public class MyClassOverrideDefaultMethod implements MyInterface {
+
+  @Override
+  public void normalMethod() {
+    System.out.println("Hello from the implemented method!");
+  }
+
+  @Override
+  public void defaultMethod() {
+    System.out.println("I have overridden the default method!!");
+  }
+}
+```
+Nothing really to say about this code as now it looks like a normal class that has implemented an interface. When ran it will produce the following output rather than what was show previously.
+
+```
+I have overridden the default method!!
+Hello from the implemented method!
+```
+Thats the basics of adding default and private methods to interfaces. Below we will look a bit more into adding methods with different access modifiers and some reasons for using default methods in the first place.
+
 
 default methods can still be overridden as normal
 provide a default implementation if not replaced (as the name suggests)
