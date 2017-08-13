@@ -1,4 +1,4 @@
-# Welcome!
+# Default and private methods in Interfaces
 
 In this tutorial we will look at default and private methods within interfaces. Default methods were added in Java 8 allowing methods to be added to an interface that comes with a default implementation that could be used, overridden or ignored without causing issues to the existing classes that have implemented an interface. Private methods were something that was missing when this feature was added as code could not be split out into smaller methods within an interface. This is something that was a bit off putting to me as if you had a default method that became a bit long there was no way to tidy it up. So now that both default and private methods can exist within an interface we can write methods like we are used to, although if you haven't used default methods yet then you will first need to get past the fact that there is now actual code living in an interface.
 
@@ -30,7 +30,7 @@ public class MyClassWithDefaultMethod implements MyInterface {
   }
 }
 ```
-As you can see from the basic snippets above a default method is defined on the interface which in turn calls a private method. As the name suggests it is a default method and therefore due to `MyClassWithDefaultMethod` not providing an implementation for defaultMethod it will carry on and use what is defined on the interface. So if `defaultMethod` and `normalMethod` were called they would produce the following output.
+As you can see from the basic snippets above a default method is defined on the interface which in turn calls a private method. As the name suggests it is a default method and therefore due to `MyClassWithDefaultMethod` not providing an implementation for `defaultMethod` it will carry on and use what is defined on the interface. So if `defaultMethod` and `normalMethod` were called they would produce the following output.
 
 ```
 Hello from the default method!
@@ -58,7 +58,7 @@ Nothing really to say about this code as now it looks like a normal class that h
 I have overridden the default method!!
 Hello from the implemented method!
 ```
-Thats the basics of adding default and private methods to interfaces. Below we will look a bit more in depth into default methods as well as some reasons for using them in the first place.
+Thats the basics of adding default and private methods to interfaces. Below we will look a bit more in depth into default methods as well as why to use them in the first place.
 
 So a class can have multiple interfaces and now an interface can define it's own default methods. What happens if a class implements multiple interfaces which each have the same default method defined on their interfaces? Well not much happens really as it will fail to compile and produce the following error.
 
@@ -84,25 +84,49 @@ public class MyClassWithTwoInterfaces implements MyInterface, MyOtherInterface {
   }
 }
 ```
-Being able to call `super` on a default interface method also resolves the error the same default method from multiple interfaces. You will still need to override the method itself but you dont need to write much more than that, if one of the original versions satisfies your needs you can call `super` on the implementation you desire and be done with it. 
+Being able to call `super` on a default interface method also resolves the error the same default method from multiple interfaces. You will still need to override the method itself but you dont need to write much more than that, if one of the original versions satisfies your needs you can call `super` on the implementation you desire and be done with it.
 
-So why use default methods in the first place? After doing some googling, it seems that they were added to Java 8 as a way of adding methods in preparation of Lambda expressions without breaking code that have implemented existing interfaces. So if we had a class that used an interface that was changed, for example code within a 3rd party library, we wouldn't need to worry about any new methods being added to the interface as our existing code will still work and the new method can be ignored until a later date. By using this example I believe it is more important for API/library developers to consider using default methods than it is for those that are writing code within their own codebase where they are in control of everything and can change any classes that have been broken by adding a new interface method.
+As an interface can extend another interface what happens when both contain a default method of the same name? I'm sure most of you can figure out the answer, but incase you can't it simply takes the implementation from the child interface / the interface furthest down the hierarchy tree.
+
+```java
+public class MyInterface {
+
+  default void defaultMethod() {
+    System.out.println("Hello from the parent interface!");
+  }
+}
+```
+```java
+public class MyOtherInterface extends MyInterface {
+
+  default void defaultMethod() {
+    System.out.println("Hello from the child interface!");
+  }
+}
+```
+When a class implements `MyOtherInterface` and calls `defaultMethod` it will print out.
+```
+Hello from the child interface!
+```
+As you can see it has called `defaultMethod` from within the child interface `MyOtherInterface`. This keeps it in line with providing an implementation to a default method from within a class, if it is included in the child / implementation then it will use that instead of the original defined on the parent interface.
+
+So why use default methods in the first place? After doing some googling, it seems that they were added to Java 8 as a way of adding methods in preparation of Lambda expressions without breaking code that have implemented existing interfaces. So if we had a class that used an interface that was changed, for example code within a 3rd party library, we wouldn't need to worry about any new methods being added to the interface as our existing code will still work and the new method can be ignored until a later date. By using this example I believe it is more important for API / library developers to consider using default methods than it is for those that are writing code within their own codebase where they are in control of everything and can change any classes that have been broken by adding a new interface method.
 
 To make the point I raised above about keeping the updated interface compatible with existing implementations, I have added a code example below to help make this clearer.
 
 ```java
 public class MyClass implements MyOldInterface {
 
-	@Override
-	public void doStuff() {
-		// does stuff
-	}
+  @Override
+  public void doStuff() {
+    // does stuff
+  }
 }
 ```
 ```java
 public interface MyOldInterface {
 
-	void doStuff();
+  void doStuff();
 }
 ```
 So here we have a class that has sitting around nice and happy as it has implemented the method defined on the interface and requires no other work to be done. And then we come along without a care in the world and add a new method to the interface.
@@ -110,7 +134,7 @@ So here we have a class that has sitting around nice and happy as it has impleme
 ```java
 public interface MyNewInterface {
 
-	void doStuff();
+  void doStuff();
 
   void doSomeMore();
 }
@@ -120,19 +144,13 @@ When we try to compile the code it will fail as we have not provided an implemen
 ```java
 public interface MyNewInterface {
 
-	void doStuff();
+  void doStuff();
 
   default void doSomeMore() {
     // do some more stuff
   };
 }
 ```
-We would remain happy as our existing class will require no extra work and will still compile. When we eventually decide that we need to implement the new method added to the interface then we can do so as normal.
+We would remain happy as our existing class will require no extra work and will still compile. When we eventually decide that we need to implement the new method added to the interface then we can do so as normal. Furthermore if the `doSomeMore` method was long enough maybe a private method or two could be used to keep the interface nice and tidy, helping you keep everyone who uses your code happy!
 
-default methods can still be overridden as normal
-provide a default implementation if not replaced (as the name suggests)
-add context to why default methods are useful (added to jdk8 to help in adding features to the jdk), a class can inherit from multiple interfaces and therefore the default methods can help provide code that can easily be added to classes via implementing interfaces
-private methods are used like normal private methods, simply let you reuse and tidy up code within the interface. Which was something that was missing from default methods in java8 which could lead to long default methods.
-what happens if a private or package private method is added to the class who's interface has a default method of the same name
-try and find a decent use case for default + private methods, but start with the basic example
-mention static methods, but I dont really see much point of them
+I think that pretty much covers it. In conclusion default methods were added as part of Java 8 with private methods being an addition in java 9. Default methods allow an interface to define an implementation for a method so that when a class implements the interface it does not need to provide it own version of the method. Helping APIs and libraries move forward without always needing to make breaking changes when interfaces require additional methods. Hopefully this post demonstrated their ease of use, although just because they are simple does not mean they should be added all over the place and for developers only concerned about their own codebase might not ever need to use them. I almost forgot to mention private methods here, but quite frankly that's because theres not much to say about them and if you noticed while going through this post there is barely any mention of them. Private methods in interfaces are there to make code look nicer and give the option of some code reuse.
