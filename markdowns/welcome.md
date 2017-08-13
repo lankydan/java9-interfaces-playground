@@ -1,6 +1,6 @@
 # Default and private methods in Interfaces
 
-In this tutorial we will look at default and private methods within interfaces. Default methods were added in Java 8 allowing methods to be added to an interface that comes with a default implementation that could be used, overridden or ignored without causing issues to the existing classes that have implemented an interface. Private methods were something that was missing when this feature was added as code could not be split out into smaller methods within an interface. This is something that was a bit off putting to me as if you had a default method that became a bit long there was no way to tidy it up. So now that both default and private methods can exist within an interface we can write methods like we are used to, although if you haven't used default methods yet then you will first need to get past the fact that there is now actual code living in an interface.
+In this tutorial we will look at default and private methods within interfaces. Default methods were added in Java 8 allowing methods to be added to an interface that comes with a default implementation that could be used, overridden or ignored without causing issues to existing classes that have implemented an interface. Private methods were missing when default methods were added, preventing code being split out into smaller methods within an interface. This is something that was a bit off putting to me as if you had a default method that became a bit long there was no way to tidy it up. So now that both default and private methods can exist within an interface we can write methods like we are used to, although if you haven't used default methods yet then you will first need to get past the fact that there is now actual code living in an interface.
 
 In terms of adding default and private methods to an interface, its really simple. To add a default method just add the keyword `default` to the method definition and I'm not even going to tell you how to add a private method as I don't wish to insult you!
 
@@ -60,7 +60,7 @@ Hello from the implemented method!
 ```
 Thats the basics of adding default and private methods to interfaces. Below we will look a bit more in depth into default methods as well as why to use them in the first place.
 
-So a class can have multiple interfaces and now an interface can define it's own default methods. What happens if a class implements multiple interfaces which each have the same default method defined on their interfaces? Well not much happens really as it will fail to compile and produce the following error.
+So a class can have multiple interfaces and now an interface can define it's own default methods. What happens if a class implements multiple interfaces which each have the same default method defined? Well not much happens really as it will fail to compile and produce the following error.
 
 ```
 java: class MyClassWithTwoInterfaces inherits unrelated defaults for defaultMethod() from types MyInterface and MyOtherInterface
@@ -89,7 +89,7 @@ Being able to call `super` on a default interface method also resolves the error
 As an interface can extend another interface what happens when both contain a default method of the same name? I'm sure most of you can figure out the answer, but incase you can't it simply takes the implementation from the child interface / the interface furthest down the hierarchy tree.
 
 ```java
-public class MyInterface {
+public interface MyInterface {
 
   default void defaultMethod() {
     System.out.println("Hello from the parent interface!");
@@ -97,7 +97,7 @@ public class MyInterface {
 }
 ```
 ```java
-public class MyOtherInterface extends MyInterface {
+public interface MyOtherInterface extends MyInterface {
 
   default void defaultMethod() {
     System.out.println("Hello from the child interface!");
@@ -110,9 +110,9 @@ Hello from the child interface!
 ```
 As you can see it has called `defaultMethod` from within the child interface `MyOtherInterface`. This keeps it in line with providing an implementation to a default method from within a class, if it is included in the child / implementation then it will use that instead of the original defined on the parent interface.
 
-So why use default methods in the first place? After doing some googling, it seems that they were added to Java 8 as a way of adding methods in preparation of Lambda expressions without breaking code that have implemented existing interfaces. So if we had a class that used an interface that was changed, for example code within a 3rd party library, we wouldn't need to worry about any new methods being added to the interface as our existing code will still work and the new method can be ignored until a later date. By using this example I believe it is more important for API / library developers to consider using default methods than it is for those that are writing code within their own codebase where they are in control of everything and can change any classes that have been broken by adding a new interface method.
+So why use default methods in the first place? After doing some googling, it seems that they were added to Java 8 as a way of adding methods in preparation for Lambda expressions without breaking code that have implemented existing interfaces. So if we had a class that used an interface that was changed, for example code within a 3rd party library, we wouldn't need to worry about any new methods being added to the interface as our existing code will still work and the new method can be ignored until a later date. By using this example I believe it is more important for API / library developers to consider using default methods than it is for those that are writing code within their own codebase where they are in control of everything and can change any classes that have been broken by adding a new interface method.
 
-To make the point I raised above about keeping the updated interface compatible with existing implementations, I have added a code example below to help make this clearer.
+To make the point I raised above about keeping the updated interface compatible with existing implementations, I have added a code example below to help make this clearer (if it wasn't already).
 
 ```java
 public class MyClass implements MyOldInterface {
@@ -153,4 +153,6 @@ public interface MyNewInterface {
 ```
 We would remain happy as our existing class will require no extra work and will still compile. When we eventually decide that we need to implement the new method added to the interface then we can do so as normal. Furthermore if the `doSomeMore` method was long enough maybe a private method or two could be used to keep the interface nice and tidy, helping you keep everyone who uses your code happy!
 
-I think that pretty much covers it. In conclusion default methods were added as part of Java 8 with private methods being an addition in java 9. Default methods allow an interface to define an implementation for a method so that when a class implements the interface it does not need to provide it own version of the method. Helping APIs and libraries move forward without always needing to make breaking changes when interfaces require additional methods. Hopefully this post demonstrated their ease of use, although just because they are simple does not mean they should be added all over the place and for developers only concerned about their own codebase might not ever need to use them. I almost forgot to mention private methods here, but quite frankly that's because theres not much to say about them and if you noticed while going through this post there is barely any mention of them. Private methods in interfaces are there to make code look nicer and give the option of some code reuse.
+I think that pretty much covers it. In conclusion default methods were added as part of Java 8 with private methods being an addition in java 9. Default methods allow an interface to define an implementation for a method so that when a class implements the interface it does not need to provide it's own version of the method, helping APIs and libraries move forward without always needing to make breaking changes when interfaces require additional methods. Hopefully this post demonstrated their ease of use, although just because they are simple does not mean they should be added all over the place and for developers only concerned about their own codebase might not ever need to use them. I almost forgot to mention private methods here, but quite frankly that's because theres not much to say about them and if you noticed while going through this post there is barely any mention of them. Private methods in interfaces are there to make code look nicer and give the option of some code reuse.
+
+If you have liked this post, check out my personal blog which contains similar tutorials at [www.lankydanblog.com](www.lankydanblog.com).
