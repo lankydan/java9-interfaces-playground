@@ -129,7 +129,7 @@ public interface MyOldInterface {
   void doStuff();
 }
 ```
-So here we have a class that has sitting around nice and happy as it has implemented the method defined on the interface and requires no other work to be done. And then we come along without a care in the world and add a new method to the interface.
+So here we have a class that is sitting around nice and happy as it has implemented the method defined on the interface and requires no other work to be done. And then we come along without a care in the world and add a new method to the interface.
 
 ```java
 public interface MyNewInterface {
@@ -148,11 +148,11 @@ public interface MyNewInterface {
 
   default void doSomeMore() {
     // do some more stuff
-  };
+  }
 }
 ```
-We would remain happy as our existing class will require no extra work and will still compile. When we eventually decide that we need to implement the new method added to the interface then we can do so as normal. Furthermore if the `doSomeMore` method was long enough maybe a private method or two could be used to keep the interface nice and tidy, helping you keep everyone who uses your code happy!
+We would remain happy as our existing class requireS no extra work and will still compile. When we eventually decide that we need to implement the new method added to the interface then we can do so as normal. Furthermore if the `doSomeMore` method was long enough maybe a private method or two could be used to keep the interface nice and tidy, helping you keep everyone who uses your code happy!
 
-I think that pretty much covers it. In conclusion default methods were added as part of Java 8 with private methods being an addition in java 9. Default methods allow an interface to define an implementation for a method so that when a class implements the interface it does not need to provide it's own version of the method, helping APIs and libraries move forward without always needing to make breaking changes when interfaces require additional methods. Hopefully this post demonstrated their ease of use, although just because they are simple does not mean they should be added all over the place and for developers only concerned about their own codebase might not ever need to use them. I almost forgot to mention private methods here, but quite frankly that's because theres not much to say about them and if you noticed while going through this post there is barely any mention of them. Private methods in interfaces are there to make code look nicer and give the option of some code reuse.
+I think that pretty much covers it. In conclusion default methods were added as part of Java 8 with private methods being an addition in java 9. Default methods allow an interface to define an implementation for a method so that when a class implements the interface it does not need to provide it's own version of the method, helping APIs and libraries move forward without always needing to make breaking changes when interfaces require additional methods. Hopefully this post demonstrated their ease of use, although just because they are simple does not mean they should be added all over the place and for developers only concerned about their own codebase might never find a need to use them. I almost forgot to mention private methods here, but quite frankly that's because theres not much to say about them and if you noticed while going through this post there is barely any mention of them. Private methods in interfaces are there to make code look nicer and give the option of some code reuse.
 
 If you have liked this post, check out my personal blog which contains similar tutorials at [www.lankydanblog.com](http://www.lankydanblog.com).
