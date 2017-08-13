@@ -112,7 +112,7 @@ As you can see it has called `defaultMethod` from within the child interface `My
 
 So why use default methods in the first place? After doing some googling, it seems that they were added to Java 8 as a way of adding methods in preparation for Lambda expressions without breaking code that implemented existing interfaces. So if we had a class that used an interface that was changed, for example code within a 3rd party library, we wouldn't need to worry about any new methods being added to the interface as our existing code will still work and the new method can be ignored until a later date. By using this example I believe it is more important for API / library developers to consider using default methods than it is for those that are writing code within their own codebase where they are in control of everything and can change any classes that have been broken by adding a new interface method.
 
-To make the point I raised above about keeping the updated interface compatible with existing implementations, I have added a code example below to help make this clearer (if it wasn't already).
+Below are some code snippets to help make the above point clearer (if it wasn't already).
 
 ```java
 public class MyClass implements MyOldInterface {
